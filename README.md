@@ -1,5 +1,5 @@
 # Cancer-Inhibitors
-Predicting cancer-inhibitor molecules based on chemical fingerprints/
+Predicting cancer-inhibitor molecules based on chemical fingerprints
 # Inhibitor Classifier
 
 This repository contains a comprehensive analysis and modeling of an inhibitor dataset, aiming to predict certain inhibitors based on various models and ultimately combining them using ensemble methods.
