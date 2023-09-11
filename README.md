@@ -1,33 +1,39 @@
 # Cancer-Inhibitors
-Predicting cancer-inhibitor molecules based on chemical fingerprints
-# Inhibitor Classifier
-
-This repository contains a comprehensive analysis and modeling of an inhibitor dataset, aiming to predict certain inhibitors based on various models and ultimately combining them using ensemble methods.
+Analysis and modeling of cancer-inhibitor molecules using chemical fingerprints.
 
 ## Overview
 
 1. **Data Loading and Preprocessing**: 
-    - The data is loaded from Kaggle's directory for train and test datasets.
-    - Certain rows are dropped based on specific conditions from the training dataset.
-    - The datasets are then split into feature matrices (`X_train` and `X_test`) and target vectors (`y_train` and `y_test`).
-    - Any missing values in the data are filled with zeros and data types are set as 'category' for features.
-    - Principal Component Analysis (PCA) is used to reduce the dimensions of the dataset.
+    - Loaded the data from Kaggle's directory for train and test datasets.
+    - Observed during EDA that the train dataset and the test dataset had differing target variable distributions.
+
+    ![image](https://github.com/GyulaMaloveczky/Cancer-Inhibitors/assets/117769460/3c2c6ade-6cc6-404f-8469-940c08500469)
+
+    ![image](https://github.com/GyulaMaloveczky/Cancer-Inhibitors/assets/117769460/f56dee42-e1d3-4a64-86fb-a3a182999efd)
+
+    - Dropped rows to oversample the training data so the distribution of the target variable matches the test data's.
+    - Split the datasets into feature matrices (`X_train` and `X_test`) and target vectors (`y_train` and `y_test`).
+    - Filled missing values in the data with zeros and set data types as 'category' for features.
+    - Utilized Multiple Correspondence Analysis (MCA) instead of PCA for dimensionality reduction. Decided the number of components based on the 1:10 rule and considered the amount of information loss.
+    
+    ![image](https://github.com/GyulaMaloveczky/Cancer-Inhibitors/assets/117769460/d51dc5ce-306a-439e-a95a-9ff1a1e9f459)
+
 
 2. **Modeling**: 
-    - Several machine learning models are trained on the dataset:
-      * Support Vector Machine (SVM)
-      * Random Forest
-      * Gradient Boosting
-      * K-Nearest Neighbors (KNN)
-      * Gaussian Naive Bayes
-      * Logistic Regression
-    - Hyperparameter tuning is performed for the models using GridSearchCV to get the best parameters for each model.
-    
+    - Trained the following machine learning models:
+      * Hyperparameter-tuned Support Vector Machine (SVM)
+      * Hyperparameter-tuned K-Nearest Neighbors (KNN)
+      * Hyperparameter-tuned Gradient Boosting (GBOOST)
+      * Hyperparameter-tuned Random Forest (Forest)
+      * Gaussian Naive Bayes (Bayesian inference)
+      * Logistic Regression (logreg)
+    - Conducted hyperparameter tuning using GridSearchCV for SVM, KNN, GBOOST, and Forest.
+
 3. **Ensemble Learning**:
-    - After individual models are trained, an ensemble method called `VotingClassifier` is used. It takes into account the predictions from all the trained models to make a final prediction using majority voting.
+    - Used a hard voting classifier, `VotingClassifier`, to ensemble the predictions from the models.
 
 4. **Evaluation**:
-    - The performance of the ensemble classifier is evaluated using metrics such as:
+    - Evaluated the performance of the ensemble classifier using:
       * Accuracy
       * Precision
       * Recall
@@ -35,23 +41,31 @@ This repository contains a comprehensive analysis and modeling of an inhibitor d
 
 ## Dataset
 
-The dataset consists of inhibitors and is loaded from the paths:
-- Training dataset: `/kaggle/input/inhibitors/cdk2_train.csv`
-- Testing dataset: `/kaggle/input/inhibitors/cdk2_test.csv`
+Utilized inhibitor datasets:
+- Training dataset path: `/kaggle/input/inhibitors/cdk2_train.csv`
+- Testing dataset path: `/kaggle/input/inhibitors/cdk2_test.csv`
 
-## Usage
+##Note about the dataset
+The apparant overfit was due the train and test being from different distributions. I have validated the same pipeline by mixing the train and test data and resplitting them randomly. It performed significantly better (f1 score of 0.85-0.95). 
+## Libraries Imported
 
-1. Ensure you have the required libraries installed:
-    - `numpy`, `pandas`, `matplotlib`, `seaborn`, `sklearn`
+```python
+import numpy as np 
+import pandas as pd 
+from sklearn import svm
+import prince
+import matplotlib.pyplot as plt
+import seaborn as sns
+import sklearn.svm
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import VotingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
 
-2. Run the code to perform data preprocessing, train various models, and evaluate the ensemble classifier.
-
-3. Observe the performance metrics printed at the end of the run to understand the effectiveness of the ensemble classifier.
-
-## Contribution
-
-If you have any suggestions or find any bugs, please create an issue or submit a pull request.
-
-## License
-
-This project is open-source and available to everyone under the MIT License.
